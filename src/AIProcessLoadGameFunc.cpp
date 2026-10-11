@@ -113,13 +113,10 @@ namespace MaxsuAIProcessFixNamespace
 				return;
 			}
 
-			if (ai_handler->GetActorsMapSize() > 0)
+			if (ai_handler->HasPendingActorUpdate() || EventsGuard::getIsWaitSleepStart())
 			{
-				_FATALERROR("Abnormal! AI updating procecure broken in saving! Please report to the mod authour! (MaxsuAIProcessFix.DLL)");
-
-				MessageBoxW(NULL, L"Abnormal! Caught a fatal error during saving! Please report to the mod author!", L"Error Occured: MaxsuAIProcessFix.DLL", MB_OK | MB_ICONHAND);
-
-				abort();
+				_MESSAGE("Save started while AI process update was pending. Cancelling the pending update.");
+				ai_handler->CancelPendingUpdateForSave();
 			}
 		}
 	}

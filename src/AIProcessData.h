@@ -125,7 +125,11 @@ namespace MaxsuAIProcessFixNamespace
 
 		inline size_t   GetActorsMapSize() const { return ActorsMap.size();}
 
+		inline bool		HasPendingActorUpdate() const { return !ActorsMap.empty(); }
+
 		void		    ClearActorsMap(){ ActorsMap.clear();}
+
+		void			CancelPendingUpdateForSave();
 		
 
 		friend void SleepWaitStartHandle<RE::TESWaitStartEvent>::GetLoadActors();

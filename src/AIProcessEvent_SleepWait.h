@@ -123,6 +123,12 @@ namespace MaxsuAIProcessFixNamespace
 				return EventResult::kContinue;
 			}
 
+			if (a_datahandler->GetActorsMapSize() == 0 && EventsGuard::getIsUpdateReady()) {
+				a_datahandler->SetLastRecordTime(thiscalendar->GetCurrentGameTime());
+				_MESSAGE("No queued actors remain at {} stop; skipping update.", this->EventName);
+				return EventResult::kContinue;
+			}
+
 			auto lasting_time = thiscalendar->GetCurrentGameTime() - a_datahandler->GetLastRecordTime();
 
 			_MESSAGE("Last Record Time is {}, Current Game Time is {}", a_datahandler->GetLastRecordTime(), thiscalendar->GetCurrentGameTime());

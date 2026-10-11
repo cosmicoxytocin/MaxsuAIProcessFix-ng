@@ -1,5 +1,6 @@
 #include "AIProcessData.h"
 #include "AIProcessFunction.h"
+#include "AIProcess_Guards.h"
 #include "FormUtil.h"
 
 namespace MaxsuAIProcessFixNamespace
@@ -245,6 +246,27 @@ namespace MaxsuAIProcessFixNamespace
 		}
 
 		_DMESSAGE("Update {} actors in total", update_actornums);
+	}
+
+	void AIProDataHandler::CancelPendingUpdateForSave()
+	{
+		const bool had_pending_actors = !ActorsMap.empty();
+		const bool was_sleep_wait_active = EventsGuard::getIsWaitSleepStart();
+
+		if (!had_pending_actors && !was_sleep_wait_active) {
+			return;
+		}
+
+		_MESSAGE("Cancelling pending AI process update because a save has started.");
+
+		ActorsMap.clear();
+
+		MoveAttachEventHandler::RemoveSink();
+
+		EventsGuard::SetWaitSleepStartFlag(false);
+		EventsGuard::SetUpdateReadyFlag(true);
+
+		_MESSAGE("Pending AI process update cancelled successfully");
 	}
 
 }
